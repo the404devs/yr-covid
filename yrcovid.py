@@ -9,7 +9,7 @@ munArr = ["", "Aurora", "East Gwillimbury", "Georgina", "King", "Markham", "Newm
 
 def intro():
     print("COVID-19 Case Counter (York Region)")
-    print("v0.0.1 (05/28/2021) - Owen Bowden (the404)")
+    print("v0.0.2 (06/11/2021) - Owen Bowden (the404)")
     print("------------------------------------------")
     print("Select municipality to show data for:")
     print("[1]: Aurora")
@@ -76,6 +76,7 @@ for row in sortedlist:
         data[1][i] += 1
 
 filledData = [[],[]]
+
 date = datetime.datetime.strptime("2020-02-29", "%Y-%m-%d").date()
 for i in range(len(data[0])):
     currentDate = datetime.datetime.strptime(data[0][i], "%Y-%m-%d").date()
@@ -87,8 +88,19 @@ for i in range(len(data[0])):
     filledData[1].append(data[1][i])
     date += datetime.timedelta(days=1)
 
-# for i in range(len(filledData[0])):
-#     print(str(filledData[0][i]) + " " + str(filledData[1][i]))
+
+finalDate = datetime.datetime.strptime((filledData[0][len(filledData[0]) - 1]), "%Y-%m-%d")
+today = datetime.date.today()
+
+while(finalDate.date() != today):
+    print(str(finalDate.date()) + " " + str(today))
+    finalDate += datetime.timedelta(days=1)
+    filledData[0].append(finalDate.isoformat().split("T", 1)[0])
+    filledData[1].append(0)
+
+
+for i in range(len(filledData[0])):
+    print(str(filledData[0][i]) + ": " + str(filledData[1][i]))
 
 print("Creating graph...")
 left = range(len(filledData[0]))
@@ -101,8 +113,10 @@ if(munArr[mun]==""):
     plt.title('COVID-19 Case Data for York Region')
 else:
     plt.title('COVID-19 Case Data for ' + munArr[mun])
-plt.locator_params(axis='x', nbins=50)
-# plt.locator_params(axis='y', nbins=max(filledData[1]))
+plt.locator_params(axis='x', nbins=80)
+#plt.locator_params(axis='y', nbins=max(filledData[1]))
+
+plt.locator_params(axis='y', nbins=30)
 ax = plt.gca()
 plt.margins(0)
 plt.grid(zorder=3)
