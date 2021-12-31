@@ -9,7 +9,7 @@ munArr = ["", "Aurora", "East Gwillimbury", "Georgina", "King", "Markham", "Newm
 
 def intro():
     print("COVID-19 Case Counter (York Region)")
-    print("v0.0.2 (06/11/2021) - Owen Bowden (the404)")
+    print("v0.0.3 (12/31/2021) - Owen Bowden (the404)")
     print("------------------------------------------")
     print("Select municipality to show data for:")
     print("[1]: Aurora")
@@ -51,6 +51,7 @@ reader = csv.reader(raw,delimiter=',')
 writer = csv.writer(dateAdjusted,delimiter=',')
 
 print("Adjusting date formats...")
+
 for row in reader:
     try:
         date = datetime.datetime.strptime(row[5], '%m/%d/%Y')
@@ -66,7 +67,7 @@ print("Sorting...")
 sortedlist = sorted(reader, key=operator.itemgetter(5))
 
 data = [[],[]]
-i = -1;
+i = -1
 for row in sortedlist:
     if munArr[mun] in row[3]:
         if row[5] not in data[0]:
@@ -93,15 +94,16 @@ finalDate = datetime.datetime.strptime((filledData[0][len(filledData[0]) - 1]), 
 today = datetime.date.today()
 
 while(finalDate.date() != today):
-    print(str(finalDate.date()) + " " + str(today))
     finalDate += datetime.timedelta(days=1)
     filledData[0].append(finalDate.isoformat().split("T", 1)[0])
     filledData[1].append(0)
 
-
+total = 0
 for i in range(len(filledData[0])):
     print(str(filledData[0][i]) + ": " + str(filledData[1][i]))
+    total += filledData[1][i]
 
+print("Pandemic Total: " + str(total))
 print("Creating graph...")
 left = range(len(filledData[0]))
 plt.bar(left, filledData[1], tick_label = filledData[0], width = 0.6, color = ['purple'])
@@ -110,11 +112,11 @@ plt.xticks(rotation = 90)
 plt.xlabel('Date')
 plt.ylabel('Number of daily new cases')
 if(munArr[mun]==""):
-    plt.title('COVID-19 Case Data for York Region')
+    plt.title('COVID-19 Case Data for York Region  --  ' + str(total) + ' Total')
 else:
-    plt.title('COVID-19 Case Data for ' + munArr[mun])
+    plt.title('COVID-19 Case Data for ' + munArr[mun] + '  --  ' + str(total) + ' Total')
 plt.locator_params(axis='x', nbins=80)
-#plt.locator_params(axis='y', nbins=max(filledData[1]))
+# plt.locator_params(axis='y', nbins=max(filledData[1]))
 
 plt.locator_params(axis='y', nbins=30)
 ax = plt.gca()

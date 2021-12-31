@@ -2,6 +2,10 @@
 A Python script that pulls daily case data from York Region's website, parses it, and creates a graph.
 Requires matplotlib.
 
+### *0.0.3 (12/31/2021)*
+------------------------
+- Now displays the total number of cases for the entire pandemic.
+
 ### *0.0.2 (06/11/2021)*
 ------------------------
 - Verbose case data output in console
